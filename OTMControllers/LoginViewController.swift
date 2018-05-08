@@ -19,6 +19,7 @@ class LoginViewController: UIViewController {
     
     // MARK: Functions
     
+    //take user to sign up url for udacity
     @IBAction func hereButtonPressed () {
         
         UIApplication.shared.open(URL(string: "https://auth.udacity.com/sign-up?next=https%3A%2F%2Fclassroom.udacity.com%2Fauthenticated")!, options: [:], completionHandler: nil)

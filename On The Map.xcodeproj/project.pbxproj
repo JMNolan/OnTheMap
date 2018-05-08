@@ -18,10 +18,8 @@
 		5125B64A207444A7004BD84A /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5125B649207444A7004BD84A /* Convenience.swift */; };
 		5125B64C20744527004BD84A /* OTMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5125B64B20744527004BD84A /* OTMClient.swift */; };
 		5125B64E2075DDC3004BD84A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5125B64D2075DDC3004BD84A /* LoginViewController.swift */; };
-		51C003F72085850600DB7C40 /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C003F62085850600DB7C40 /* LocationTableViewCell.swift */; };
 		51CB40D0207EE42B000D1164 /* LocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CB40CF207EE42B000D1164 /* LocationTableViewController.swift */; };
 		51CB40D2207F1B18000D1164 /* GCDBlackbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CB40D1207F1B18000D1164 /* GCDBlackbox.swift */; };
-		51CB40D4208029AD000D1164 /* studentLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CB40D3208029AD000D1164 /* studentLocationInfo.swift */; };
 		51CB40D6208031F1000D1164 /* MapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CB40D5208031F1000D1164 /* MapViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,10 +58,8 @@
 		5125B649207444A7004BD84A /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		5125B64B20744527004BD84A /* OTMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTMClient.swift; sourceTree = "<group>"; };
 		5125B64D2075DDC3004BD84A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		51C003F62085850600DB7C40 /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		51CB40CF207EE42B000D1164 /* LocationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewController.swift; sourceTree = "<group>"; };
 		51CB40D1207F1B18000D1164 /* GCDBlackbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDBlackbox.swift; sourceTree = "<group>"; };
-		51CB40D3208029AD000D1164 /* studentLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = studentLocationInfo.swift; sourceTree = "<group>"; };
 		51CB40D5208031F1000D1164 /* MapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,7 +116,6 @@
 				5125B61A2073302C004BD84A /* MapViewController.swift */,
 				51CB40D5208031F1000D1164 /* MapViewDelegate.swift */,
 				51CB40CF207EE42B000D1164 /* LocationTableViewController.swift */,
-				51C003F62085850600DB7C40 /* LocationTableViewCell.swift */,
 				5125B61C2073302C004BD84A /* Main.storyboard */,
 				5125B61F2073302F004BD84A /* Assets.xcassets */,
 				5125B6212073302F004BD84A /* LaunchScreen.storyboard */,
@@ -155,7 +150,6 @@
 				5125B649207444A7004BD84A /* Convenience.swift */,
 				5125B64B20744527004BD84A /* OTMClient.swift */,
 				51CB40D1207F1B18000D1164 /* GCDBlackbox.swift */,
-				51CB40D3208029AD000D1164 /* studentLocationInfo.swift */,
 			);
 			path = OTMModels;
 			sourceTree = "<group>";
@@ -292,14 +286,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				51CB40D2207F1B18000D1164 /* GCDBlackbox.swift in Sources */,
-				51CB40D4208029AD000D1164 /* studentLocationInfo.swift in Sources */,
 				5125B64E2075DDC3004BD84A /* LoginViewController.swift in Sources */,
 				5125B61B2073302C004BD84A /* MapViewController.swift in Sources */,
 				5125B64A207444A7004BD84A /* Convenience.swift in Sources */,
 				5125B6192073302C004BD84A /* AppDelegate.swift in Sources */,
 				51CB40D6208031F1000D1164 /* MapViewDelegate.swift in Sources */,
 				5125B64C20744527004BD84A /* OTMClient.swift in Sources */,
-				51C003F72085850600DB7C40 /* LocationTableViewCell.swift in Sources */,
 				5125B648207331FB004BD84A /* Constants.swift in Sources */,
 				51CB40D0207EE42B000D1164 /* LocationTableViewController.swift in Sources */,
 			);

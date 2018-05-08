@@ -11,30 +11,18 @@ import MapKit
 
 class OTMClient: NSObject {
     
+    // MARK: Properties
     static var userKey: String!
     static var sessionID: String!
     static var studentLocations: [[String:AnyObject]]!
     static var allPins: [MKPointAnnotation] = []
     
-    func postStudentLocation () {
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/8ZExGR5uX8"
-        let url = URL(string: urlString)
-        var request = URLRequest(url: url!)
-        request.httpMethod = "PUT"
-        request.addValue(Constants.ApplicationID, forHTTPHeaderField: Constants.ApplicationIDHeader)
-        request.addValue(Constants.ApiKey, forHTTPHeaderField: Constants.RestAPIHeader)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Cupertino, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.322998, \"longitude\": -122.032182}".data(using: .utf8)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print("Error retrievig data (postStudentLocation)")
-                return
-            }
-            print(String(data: data!, encoding: .utf8)!)
-        }
-        task.resume()
-    }
+    static var userFirstName: String!
+    static var userLastName: String!
+    static var userMapString: String!
+    static var userMediaURL: String!
+    static var userLatitude: Double!
+    static var userLongitude: Double!
     
     class func sharedInstance() -> OTMClient {
         struct Singleton {

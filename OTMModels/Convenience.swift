@@ -11,6 +11,7 @@ import UIKit
 
 extension OTMClient {
     
+    //retrieve student locations from Udaicty Parse API
     func getStudentLocations (completionHandler: @escaping (_ success: Bool, _ errorString: String?) -> Void ) {
         var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=100")!)
         request.addValue(OTMClient.Constants.ApplicationID, forHTTPHeaderField: OTMClient.Constants.ApplicationIDHeader)
@@ -44,6 +45,9 @@ extension OTMClient {
                 return
             }
             
+            OTMClient.userFirstName = parsedData[OTMClient.StudentLocationResponseKeys.FirstName] as! String
+            OTMClient.userLastName = parsedData[OTMClient.StudentLocationResponseKeys.LastName] as! String
+            
             OTMClient.studentLocations = results
             
             completionHandler(true, nil)
@@ -51,6 +55,28 @@ extension OTMClient {
         task.resume()
     }
     
+    //post user name, location, and url to Parse
+    func postStudentLocation (_ name: String, _ url: String, _ latitude: Double, _ longitude: Double) {
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/8ZExGR5uX8"
+        let url = URL(string: urlString)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "PUT"
+        request.addValue(Constants.ApplicationID, forHTTPHeaderField: Constants.ApplicationIDHeader)
+        request.addValue(Constants.ApiKey, forHTTPHeaderField: Constants.RestAPIHeader)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "{\"uniqueKey\": \"\(OTMClient.sessionID)\", \"firstName\": \"\(OTMClient.userFirstName)\", \"lastName\": \"\(OTMClient.userLastName)\",\"mapString\": \"\(OTMClient.userMapString)\", \"mediaURL\": \"\(OTMClient.userMediaURL)\",\"latitude\": \(OTMClient.userLatitude), \"longitude\": \(OTMClient.userLongitude)}".data(using: .utf8)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            if error != nil {
+                print("Error retrievig data (postStudentLocation)")
+                return
+            }
+            print(String(data: data!, encoding: .utf8)!)
+        }
+        task.resume()
+    }
+    
+    //post a session as a means of obtaining user unique key and authenticating user
     func postUdacitySession (_ username: String, _ password: String, completionHandler: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
         
         var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
@@ -115,10 +141,12 @@ extension OTMClient {
         task.resume()
     }
     
-    func getStudentLocation (completionHandler: @escaping (_ success: Bool, _ errorString: String?) -> Void ) {
+    //get a singular student's info from Parse
+    func getStudentLocation(completionHandler: @escaping (_ success: Bool) -> Void ) {
         
         guard Methods.UniqueKeyString != "" else {
             print("UniqueKey required for user")
+            completionHandler(false)
             return
         }
         
@@ -131,7 +159,7 @@ extension OTMClient {
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil {
                 print("Error retrieving data (getSudentLocation)")
-                completionHandler(false, "An Error Occurred")
+                completionHandler(false)
                 return
             }
             print(String(data: data!, encoding: .utf8)!)
@@ -159,6 +187,7 @@ extension OTMClient {
 //        task.resume()
 //    }
     
+    //used for loggin out of session
     func deleteUdacitySession () {
         var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "DELETE"

@@ -11,24 +11,19 @@ import UIKit
 
 class LocationTableViewController: UITableViewController {
     
-    // MARK: Properties
-    
-    
-    // MARK: Outlets
-    
-    
-    
     // MARK: Functions
     
     override func viewDidLoad() {
         
     }
     
+    //set number of rows
     override func tableView (_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let count = OTMClient.allPins.count
         return count
     }
     
+    //set row content
     override func tableView (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "locationTableViewCell")
         let pins = OTMClient.allPins[(indexPath as NSIndexPath).row]
@@ -36,6 +31,7 @@ class LocationTableViewController: UITableViewController {
         return cell!
     }
     
+    //set action when row tapped
     override func tableView (_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let url = NSURL(string: OTMClient.allPins[(indexPath as NSIndexPath).row].subtitle!)

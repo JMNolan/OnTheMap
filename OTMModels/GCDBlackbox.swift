@@ -8,6 +8,7 @@
 
 import Foundation
 
+//use to update view after making visual changes in code
 func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
     DispatchQueue.main.async {
         updates()

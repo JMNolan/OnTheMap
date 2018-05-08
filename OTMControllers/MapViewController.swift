@@ -35,6 +35,7 @@ class MapViewController: UIViewController {
                     let latitude: Double
                     let longitude: Double
                     
+                    //needed due to certain values in Parse API having NSNull which is not accepted by Swift 4
                     if let first = dictionary[OTMClient.StudentLocationResponseKeys.FirstName] as? String {
                         firstName = first
                     } else {
@@ -65,19 +66,15 @@ class MapViewController: UIViewController {
                         longitude = 0.0
                     }
                     
-                    
+                    //set pin info from parsed info
                     pin.title = "\(firstName) \(lastName)"
                     pin.subtitle = url
                     pin.coordinate.latitude = latitude
                     pin.coordinate.longitude = longitude
                     
-                    if OTMClient.allPins.contains(pin) {
-                        return
-                    } else {
-                        OTMClient.allPins.append(pin)
-                        performUIUpdatesOnMain {
-                            self.mapView.addAnnotation(pin)
-                        }
+                    OTMClient.allPins.append(pin)
+                    performUIUpdatesOnMain {
+                        self.mapView.addAnnotation(pin)
                     }
                 }
             }
@@ -86,10 +83,10 @@ class MapViewController: UIViewController {
     
     @IBAction func addMyLocation(_ sender: Any) {
         
-        OTMClient.sharedInstance().getStudentLocation()
+        OTMClient.sharedInstance().getStudentLocation(completionHandler: <#T##(Bool, String?) -> Void#>)
     }
     
-    
+    //delete all previous pins and pull pins from Parse API again
     @IBAction func refreshPins(_ sender: Any) {
         
         OTMClient.sharedInstance().getStudentLocations() {(success, error) in
@@ -108,6 +105,7 @@ class MapViewController: UIViewController {
                     let latitude: Double
                     let longitude: Double
                     
+                    //needed due to some info in Parse API being populated with NSNull type which is not accepted by Swift 4
                     if let first = dictionary[OTMClient.StudentLocationResponseKeys.FirstName] as? String {
                         firstName = first
                     } else {
@@ -138,19 +136,16 @@ class MapViewController: UIViewController {
                         longitude = 0.0
                     }
                     
-                    
+                    //populate pin info with info from parsed data
                     pin.title = "\(firstName) \(lastName)"
                     pin.subtitle = url
                     pin.coordinate.latitude = latitude
                     pin.coordinate.longitude = longitude
                     
-                    if OTMClient.allPins.contains(pin) {
-                        return
-                    } else {
-                        OTMClient.allPins.append(pin)
-                        performUIUpdatesOnMain {
-                            self.mapView.addAnnotation(pin)
-                        }
+                    //add the pin to the
+                    OTMClient.allPins.append(pin)
+                    performUIUpdatesOnMain {
+                        self.mapView.addAnnotation(pin)
                     }
                 }
             }

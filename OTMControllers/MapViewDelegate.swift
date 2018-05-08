@@ -27,6 +27,7 @@ extension MapViewController: MKMapViewDelegate {
         return view
     }
     
+    //action if user taps annotation pop up
     func mapView(_ mapview: MKMapView, annotationView view: MKAnnotationView,calloutAccessoryControlTapped control: UIControl) {
         
         let url = URL(string: ((view.annotation?.subtitle)!)!)
