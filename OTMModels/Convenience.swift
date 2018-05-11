@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 extension OTMClient {
     
@@ -44,9 +45,6 @@ extension OTMClient {
                 completionHandler(false, "Unable to find entry 'results' in \(parsedData)")
                 return
             }
-            
-            OTMClient.userFirstName = parsedData[OTMClient.StudentLocationResponseKeys.FirstName] as! String
-            OTMClient.userLastName = parsedData[OTMClient.StudentLocationResponseKeys.LastName] as! String
             
             OTMClient.studentLocations = results
             
@@ -162,7 +160,16 @@ extension OTMClient {
                 completionHandler(false)
                 return
             }
-            print(String(data: data!, encoding: .utf8)!)
+            var parsedData: [String:AnyObject]!
+            
+            do {
+                parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print("Error parsing data")
+            }
+            
+            OTMClient.userFirstName = parsedData[OTMClient.StudentLocationResponseKeys.FirstName] as! String
+            OTMClient.userLastName = parsedData[OTMClient.StudentLocationResponseKeys.LastName] as! String
         }
         task.resume()
     }
@@ -211,6 +218,27 @@ extension OTMClient {
         task.resume()
     }
     
+    // geocode user input string to coordinates that are stored in OTMClient
+//    func geocodeLocation (address: String) {
+//        
+//        let address = address
+//        
+//        CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in
+//            if error != nil {
+//                print(error!)
+//                return
+//            }
+//            
+//            if (placemarks?.count)! > 0 {
+//                let placemark = placemarks?[0]
+//                let location = placemark?.location
+//                let coordinate = location?.coordinate
+//                OTMClient.userLatitude = coordinate?.latitude
+//                OTMClient.userLongitude = coordinate?.longitude
+//                
+//            }
+//        })
+//    }
     func getUserData () {
         let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/3903878747")!)
         let session = URLSession.shared

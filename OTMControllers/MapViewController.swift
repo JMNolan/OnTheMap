@@ -18,7 +18,7 @@ class MapViewController: UIViewController {
     
     
     override func viewDidLoad() {
-        mapView.delegate = self
+        mapView.delegate = MapViewDelegate
         OTMClient.sharedInstance().getStudentLocations() {(success, error) in
             guard error == nil else {
                 print(error!)
@@ -82,8 +82,6 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func addMyLocation(_ sender: Any) {
-        
-        OTMClient.sharedInstance().getStudentLocation(completionHandler: <#T##(Bool, String?) -> Void#>)
     }
     
     //delete all previous pins and pull pins from Parse API again
@@ -96,6 +94,7 @@ class MapViewController: UIViewController {
             }
             
             if success == true {
+                OTMClient.allPins = []
                 for dictionary in OTMClient.studentLocations {
                     print(dictionary)
                     let pin = MKPointAnnotation()

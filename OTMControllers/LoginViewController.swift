@@ -40,7 +40,7 @@ class LoginViewController: UIViewController {
         OTMClient.sharedInstance().postUdacitySession (usernameTextField.text!, passwordTextField.text!) {(success, error) in
             if error != nil {
                 self.loginStatusLabel.text = "Login failed"
-                print(error)
+                print(error!)
             } else if success {
                 //self.loginStatusLabel.text = "Login Successful"
                 print("HUZAAAAAAH")

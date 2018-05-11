@@ -17,12 +17,18 @@ class OTMClient: NSObject {
     static var studentLocations: [[String:AnyObject]]!
     static var allPins: [MKPointAnnotation] = []
     
+    //user info
     static var userFirstName: String!
     static var userLastName: String!
     static var userMapString: String!
     static var userMediaURL: String!
     static var userLatitude: Double!
     static var userLongitude: Double!
+    
+    //user input for updating pin
+    static var userInputLatitude: Double!
+    static var userInputLongitude: Double!
+    static var userInputURL: String!
     
     class func sharedInstance() -> OTMClient {
         struct Singleton {
