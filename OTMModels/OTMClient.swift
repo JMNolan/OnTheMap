@@ -12,7 +12,7 @@ import MapKit
 class OTMClient: NSObject {
     
     // MARK: Properties
-    static var userKey: String!
+    static var userKey = ""
     static var sessionID: String!
     static var studentLocations: [[String:AnyObject]]!
     static var allPins: [MKPointAnnotation] = []
@@ -24,11 +24,13 @@ class OTMClient: NSObject {
     static var userMediaURL: String!
     static var userLatitude: Double!
     static var userLongitude: Double!
+    static var userObjectID: String!
     
     //user input for updating pin
     static var userInputLatitude: Double!
     static var userInputLongitude: Double!
     static var userInputURL: String!
+    static var userInputExists: Bool!
     
     class func sharedInstance() -> OTMClient {
         struct Singleton {

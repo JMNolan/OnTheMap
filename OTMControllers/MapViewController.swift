@@ -18,7 +18,7 @@ class MapViewController: UIViewController {
     
     
     override func viewDidLoad() {
-        mapView.delegate = MapViewDelegate
+        mapView.delegate = self
         OTMClient.sharedInstance().getStudentLocations() {(success, error) in
             guard error == nil else {
                 print(error!)
@@ -27,7 +27,6 @@ class MapViewController: UIViewController {
             
             if success == true {
                 for dictionary in OTMClient.studentLocations {
-                    print(dictionary)
                     let pin = MKPointAnnotation()
                     let firstName: String
                     let lastName: String

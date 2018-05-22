@@ -15,16 +15,18 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginStatusLabel: UILabel!
-    
+    @IBOutlet weak var noAccountLabel: UILabel!
+    @IBOutlet weak var signUpButton: UIButton!
     
     // MARK: Functions
     
     //take user to sign up url for udacity
-    @IBAction func hereButtonPressed () {
+    @IBAction func signUpButtonPressed () {
         
         UIApplication.shared.open(URL(string: "https://auth.udacity.com/sign-up?next=https%3A%2F%2Fclassroom.udacity.com%2Fauthenticated")!, options: [:], completionHandler: nil)
     }
     
+    //take user input and send a post request to Udacity to validate user credentials
     @IBAction func loginButtonPressed () {
         
         guard usernameTextField.text != nil else {
