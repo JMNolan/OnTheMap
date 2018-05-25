@@ -54,41 +54,88 @@ extension OTMClient {
     }
     
     //post user name, location, and url to Parse
-    func postStudentLocation (_ name: String, _ url: String, _ latitude: Double, _ longitude: Double) {
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/8ZExGR5uX8"
+    func postStudentLocation (_ name: String, _ url: String, _ latitude: Double, _ longitude: Double, completionHandler: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
-        request.httpMethod = "PUT"
+        request.httpMethod = "POST"
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: Constants.ApplicationIDHeader)
         request.addValue(Constants.ApiKey, forHTTPHeaderField: Constants.RestAPIHeader)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(OTMClient.userKey)\", \"firstName\": \"\(OTMClient.userFirstName!)\", \"lastName\": \"\(OTMClient.userLastName!)\",\"mapString\": \"\(OTMClient.userMapString!)\", \"mediaURL\": \"\(url)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: .utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(OTMClient.userKey)\", \"firstName\": \"\(OTMClient.userFirstName!)\", \"lastName\": \"\(OTMClient.userLastName!)\",\"mapString\": \"\(OTMClient.userMapString!)\", \"mediaURL\": \"\(OTMClient.userMediaURL!)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: .utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print("Error retrievig data (postStudentLocation)")
+            guard error == nil else {
+                completionHandler(false, "An error occured while attempting to post information to Parse servers")
                 return
             }
+            
+            guard let data = data else {
+                completionHandler(false, "Unable to obtain data with postUdacitySession request")
+                return
+            }
+            
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            guard statusCode! <= 299 && statusCode! >= 200 else {
+                completionHandler(false, "An error ocurred with your request. Error:\(statusCode!)")
+                return
+            }
+            
+            do {
+                try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            } catch {
+                completionHandler(false, "Unable to parse data from request")
+                return
+            }
+            
+            completionHandler(true, nil)
         }
         task.resume()
     }
     
     //update student location information from previously inputted information
-    func putStudentLocation (_ url: String, _ latitude: Double, _ longitude: Double) {
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(OTMClient.userObjectID)"
+    func putStudentLocation (_ url: String, _ latitude: Double, _ longitude: Double, completionHandler: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(OTMClient.userObjectID!)"
+        print(urlString)
         let url = URL(string: urlString)
+        print(url!)
         var request = URLRequest(url: url!)
+        print(request)
         request.httpMethod = "PUT"
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: Constants.ApplicationIDHeader)
         request.addValue(Constants.ApiKey, forHTTPHeaderField: Constants.RestAPIHeader)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(OTMClient.userKey)\", \"firstName\": \"\(OTMClient.userFirstName)\", \"lastName\": \"\(OTMClient.userLastName)\",\"mapString\": \"\(OTMClient.userMapString)\", \"mediaURL\": \"\(url)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: .utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(OTMClient.userKey)\", \"firstName\": \"\(OTMClient.userFirstName)\", \"lastName\": \"\(OTMClient.userLastName)\",\"mapString\": \"\(OTMClient.userMapString)\", \"mediaURL\": \"\(OTMClient.userMediaURL!)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: .utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print("Request to putStudentLocation failed")
+            guard error == nil else {
+                print("Error retrieving data (putUdacitySession)")
+                completionHandler(false, "An error occured while requesting information from Udacity")
                 return
             }
+            
+            guard let data = data else {
+                print("Request to post session was unsuccessfull")
+                completionHandler(false, "Unable to obtain data with putUdacitySession reqeust")
+                return
+            }
+            
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            print(statusCode!)
+            guard statusCode! <= 299 && statusCode! >= 200 else {
+                print("Status code is not 2xx")
+                completionHandler(false, "\(statusCode!)")
+                return
+            }
+            
+            do {
+                try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            } catch {
+                completionHandler(false, "Unable to parse data from PUT request")
+                return
+            }
+            
+            completionHandler(true, nil)
         }
         task.resume()
     }
@@ -114,10 +161,11 @@ extension OTMClient {
                 completionHandler(false, "Unable to obtain data with postUdacitySession reqeust")
                 return
             }
-            
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode <= 299 && statusCode >= 200 else {
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            guard statusCode! <= 299 && statusCode! >= 200 else {
                 print("Status code is not 2xx")
-                completionHandler(false, "Invalid Status Code")
+                completionHandler(false, "\(statusCode!)")
+                print(statusCode!)
                 return
             }
             
@@ -160,7 +208,7 @@ extension OTMClient {
     }
     
     //get a singular student's info from Parse
-    func getStudentLocation() {
+    func getStudentLocation(completionHandler: @escaping (_ success: Bool) -> Void) {
         
         guard OTMClient.userKey != "" else {
             print("UniqueKey required for user")
@@ -168,9 +216,7 @@ extension OTMClient {
         }
         
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(OTMClient.userKey)%22%7D"
-        print(urlString)
         let url = URL(string: urlString)
-        print(url!)
         var request = URLRequest(url: url!)
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: Constants.ApplicationIDHeader)
         request.addValue(Constants.ApiKey, forHTTPHeaderField: Constants.RestAPIHeader)
@@ -178,13 +224,16 @@ extension OTMClient {
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil {
                 print("Error retrieving data (getSudentLocation)")
+                completionHandler(false)
                 return
             }
             guard let data = data else {
+                completionHandler(false)
                 return
             }
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode <= 299 && statusCode >= 200 else {
+                completionHandler(false)
                 return
             }
             var parsedData: [String:AnyObject]!
@@ -193,19 +242,25 @@ extension OTMClient {
                 parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
             } catch {
                 print("Error parsing data")
+                completionHandler(false)
             }
             
             print(parsedData)
             guard let parsedResults = parsedData[OTMClient.StudentLocationResponseKeys.Results] as! [[String:AnyObject]]? else {
                 print("No Student Info Found")
+                completionHandler(false)
                 return
             }
             print(parsedResults)
             for dictionary in parsedResults {
             OTMClient.userObjectID = (dictionary[OTMClient.StudentLocationResponseKeys.ObjectID])! as! String
+                print("This is an objectID \(OTMClient.userObjectID)")
             OTMClient.userFirstName = (dictionary[OTMClient.StudentLocationResponseKeys.FirstName])! as! String
+                print("set user first name to \(OTMClient.userFirstName)")
             OTMClient.userLastName = dictionary[OTMClient.StudentLocationResponseKeys.LastName] as! String
+                print("set user first name to \(OTMClient.userLastName)")
             }
+            completionHandler(true)
         }
         task.resume()
     }
@@ -228,7 +283,14 @@ extension OTMClient {
                 return
             }
             let range = Range(5..<data!.count)
-            let newData = data?.subdata(in: range) /* subset response data! */
+            let newData = data?.subdata(in: range)
+            
+            do {
+                try JSONSerialization.jsonObject(with: newData!, options: .allowFragments)
+            } catch {
+                print("Failed to parse results from delete session request")
+                return
+            }
         }
         task.resume()
     }

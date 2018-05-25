@@ -18,6 +18,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var noAccountLabel: UILabel!
     @IBOutlet weak var signUpButton: UIButton!
     
+    var alertMessage: String!
     // MARK: Functions
     
     //take user to sign up url for udacity
@@ -29,23 +30,35 @@ class LoginViewController: UIViewController {
     //take user input and send a post request to Udacity to validate user credentials
     @IBAction func loginButtonPressed () {
         
-        guard usernameTextField.text != nil else {
-            print("User failed to enter a username")
+        let alert = UIAlertController(title: "Login Failed", message: alertMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title:NSLocalizedString("OK", comment: "Default Action"), style: .default))
+        
+        guard usernameTextField.text != "" else {
+            alertMessage = "Please enter a valid username"
+            alert.message = alertMessage
+            self.present(alert, animated: true, completion: nil)
             return
         }
         
-        guard passwordTextField.text != nil else {
-            print("User failed to enter a password")
+        guard passwordTextField.text != "" else {
+            alertMessage = "Please enter a valid password"
+            alert.message = alertMessage
+            self.present(alert, animated: true, completion: nil)
             return
         }
         
         OTMClient.sharedInstance().postUdacitySession (usernameTextField.text!, passwordTextField.text!) {(success, error) in
             if error != nil {
-                self.loginStatusLabel.text = "Login failed"
-                print(error!)
+                if error == "403" {
+                    self.alertMessage = "Your username or password are incorrect. Please try again."
+                } else {
+                    self.alertMessage = "Your connection failed. Please check your connection and try again."
+                }
+                DispatchQueue.main.async(execute: {
+                    alert.message = self.alertMessage
+                    self.present(alert, animated: true, completion: nil)})
+               
             } else if success {
-                //self.loginStatusLabel.text = "Login Successful"
-                print("HUZAAAAAAH")
                 performUIUpdatesOnMain {
                     let nextVC = self.storyboard?.instantiateViewController(withIdentifier: "tabBarController") as! UITabBarController
                     self.navigationController?.pushViewController(nextVC, animated: true)

@@ -23,19 +23,26 @@ class InfoPostingViewController: UIViewController {
     @IBOutlet weak var worldImage: UIImageView!
     
     let pin = MKPointAnnotation()
+    var alertMessage: String!
     
+    // MARK: Functions
     override func viewDidLoad() {
-        OTMClient.sharedInstance().getStudentLocation()
-        print("location pulled")
-        if OTMClient.userFirstName == nil || OTMClient.userLastName == nil{
-            OTMClient.sharedInstance().getUserData()
-            print("data gotten")
-            OTMClient.userInputExists = false
-        } else {
-            OTMClient.userInputExists = true
-        }
+        OTMClient.sharedInstance().getStudentLocation(completionHandler: { (success) in
+            if success {
+                print("My first name is \(OTMClient.userFirstName)")
+                if OTMClient.userFirstName == nil || OTMClient.userLastName == nil{
+                    OTMClient.sharedInstance().getUserData()
+                    OTMClient.userInputExists = false
+                } else {
+                    OTMClient.userInputExists = true
+                }
+                print("User input exists is \(OTMClient.userInputExists)")
+                print("My first name is \(OTMClient.userFirstName)")
+            }
+        })
     }
     
+    //returns the user to the mapView from the search view or from the confirm view to search view depending on the title of the cancel button
     @IBAction func cancelButtonPressed(_ sender: Any) {
         if cancelButton.title == "Cancel" {
             self.dismiss(animated: true, completion: nil)
@@ -53,32 +60,59 @@ class InfoPostingViewController: UIViewController {
         }
     }
     
+    //convert user input to a usable location and store inputted url
     @IBAction func searchUserInfo() {
         
+        let alert = UIAlertController(title: "Submission Failed", message: alertMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title:NSLocalizedString("OK", comment: "Default Action"), style: .default))
+        
         guard locationTextField.text != nil && locationTextField.text != "" else {
-            errorLabel.text = "Please enter a location."
+            alert.message = "Please enter a valid location"
+            self.present(alert, animated: true, completion: nil)
             return
         }
         
         guard urlTextField.text != nil && urlTextField.text != "" else {
-            errorLabel.text = "Please enter a valid URL"
+            alert.message = "Please enter a valid url"
+            self.present(alert, animated: true, completion: nil)
             return
         }
         
         geocodeLocation(address: locationTextField.text!)
         OTMClient.userMediaURL = urlTextField.text!
+        OTMClient.userMapString = locationTextField.text!
     }
     
+    //user posts inputted information to udacity parse
     @IBAction func submitUserInfo() {
+        //create an alert box to present upon failures in this function
+        let alert = UIAlertController(title: "Submission Failed", message: alertMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default Action"), style:.default))
         if !OTMClient.userInputExists {
-            OTMClient.sharedInstance().postStudentLocation("\(OTMClient.userFirstName!) \(OTMClient.userLastName!)", OTMClient.userMediaURL!, OTMClient.userLatitude!, OTMClient.userLongitude!)
-            
+            OTMClient.sharedInstance().postStudentLocation("\(OTMClient.userFirstName!) \(OTMClient.userLastName!)", OTMClient.userMediaURL!, OTMClient.userLatitude!, OTMClient.userLongitude!, completionHandler: { (success, error) in
+                if error != nil {
+                    self.alertMessage = error!
+                    alert.message = self.alertMessage
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
         } else {
-            OTMClient.sharedInstance().putStudentLocation(OTMClient.userMediaURL, OTMClient.userLatitude, OTMClient.userLongitude)
-            
+            OTMClient.sharedInstance().putStudentLocation(OTMClient.userMediaURL, OTMClient.userLatitude, OTMClient.userLongitude, completionHandler: { (success, error) in
+                if error != nil {
+//                    self.alertMessage = error!
+//                    alert.message = self.alertMessage
+//                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    self.dismiss(animated: true, completion: nil)
+                }
+                
+            })
         }
     }
     
+    //change user inputted location to a usable location
     func geocodeLocation (address: String) {
         
         CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in

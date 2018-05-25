@@ -11,12 +11,10 @@ import MapKit
 
 class MapViewController: UIViewController {
     
-    // MARK: Properties
-    
     // MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     
-    
+    // MARK: Functions
     override func viewDidLoad() {
         mapView.delegate = self
         OTMClient.sharedInstance().getStudentLocations() {(success, error) in
@@ -80,7 +78,11 @@ class MapViewController: UIViewController {
         }
     }
     
-    @IBAction func addMyLocation(_ sender: Any) {
+    //log out by deleting session and clearing the student locations
+    @IBAction func logOut (){
+        OTMClient.sharedInstance().deleteUdacitySession()
+        OTMClient.allPins = []
+        dismiss(animated: true, completion: nil)
     }
     
     //delete all previous pins and pull pins from Parse API again
@@ -95,7 +97,6 @@ class MapViewController: UIViewController {
             if success == true {
                 OTMClient.allPins = []
                 for dictionary in OTMClient.studentLocations {
-                    print(dictionary)
                     let pin = MKPointAnnotation()
                     let firstName: String
                     let lastName: String
