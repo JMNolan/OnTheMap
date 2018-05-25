@@ -254,11 +254,8 @@ extension OTMClient {
             print(parsedResults)
             for dictionary in parsedResults {
             OTMClient.userObjectID = (dictionary[OTMClient.StudentLocationResponseKeys.ObjectID])! as! String
-                print("This is an objectID \(OTMClient.userObjectID)")
             OTMClient.userFirstName = (dictionary[OTMClient.StudentLocationResponseKeys.FirstName])! as! String
-                print("set user first name to \(OTMClient.userFirstName)")
             OTMClient.userLastName = dictionary[OTMClient.StudentLocationResponseKeys.LastName] as! String
-                print("set user first name to \(OTMClient.userLastName)")
             }
             completionHandler(true)
         }

@@ -23,21 +23,20 @@ class InfoPostingViewController: UIViewController {
     @IBOutlet weak var worldImage: UIImageView!
     
     let pin = MKPointAnnotation()
-    var alertMessage: String!
+    let alert = UIAlertController(title: "Submission Failed", message: "", preferredStyle: .alert)
     
     // MARK: Functions
     override func viewDidLoad() {
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default Action"), style:.default))
         OTMClient.sharedInstance().getStudentLocation(completionHandler: { (success) in
             if success {
-                print("My first name is \(OTMClient.userFirstName)")
                 if OTMClient.userFirstName == nil || OTMClient.userLastName == nil{
                     OTMClient.sharedInstance().getUserData()
                     OTMClient.userInputExists = false
                 } else {
                     OTMClient.userInputExists = true
                 }
-                print("User input exists is \(OTMClient.userInputExists)")
-                print("My first name is \(OTMClient.userFirstName)")
             }
         })
     }
@@ -63,9 +62,6 @@ class InfoPostingViewController: UIViewController {
     //convert user input to a usable location and store inputted url
     @IBAction func searchUserInfo() {
         
-        let alert = UIAlertController(title: "Submission Failed", message: alertMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title:NSLocalizedString("OK", comment: "Default Action"), style: .default))
-        
         guard locationTextField.text != nil && locationTextField.text != "" else {
             alert.message = "Please enter a valid location"
             self.present(alert, animated: true, completion: nil)
@@ -85,15 +81,12 @@ class InfoPostingViewController: UIViewController {
     
     //user posts inputted information to udacity parse
     @IBAction func submitUserInfo() {
-        //create an alert box to present upon failures in this function
-        let alert = UIAlertController(title: "Submission Failed", message: alertMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default Action"), style:.default))
+
         if !OTMClient.userInputExists {
             OTMClient.sharedInstance().postStudentLocation("\(OTMClient.userFirstName!) \(OTMClient.userLastName!)", OTMClient.userMediaURL!, OTMClient.userLatitude!, OTMClient.userLongitude!, completionHandler: { (success, error) in
                 if error != nil {
-                    self.alertMessage = error!
-                    alert.message = self.alertMessage
-                    self.present(alert, animated: true, completion: nil)
+                    self.alert.message = "\(error!)"
+                    self.present(self.alert, animated: true, completion: nil)
                 } else {
                     self.dismiss(animated: true, completion: nil)
                 }
@@ -101,9 +94,8 @@ class InfoPostingViewController: UIViewController {
         } else {
             OTMClient.sharedInstance().putStudentLocation(OTMClient.userMediaURL, OTMClient.userLatitude, OTMClient.userLongitude, completionHandler: { (success, error) in
                 if error != nil {
-                    self.alertMessage = error!
-                    alert.message = self.alertMessage
-                    self.present(alert, animated: true, completion: nil)
+                    self.alert.message = "\(error!)"
+                    self.present(self.alert, animated: true, completion: nil)
                 } else {
                     self.dismiss(animated: true, completion: nil)
                 }
@@ -117,7 +109,8 @@ class InfoPostingViewController: UIViewController {
         
         CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in
             if error != nil {
-                self.errorLabel.text = "Geocoding failed"
+                self.alert.message = "Geocoding failed"
+                self.present(self.alert, animated: true, completion: nil)
                 return
             }
             

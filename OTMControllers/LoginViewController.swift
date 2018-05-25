@@ -24,7 +24,7 @@ class LoginViewController: UIViewController {
     //take user to sign up url for udacity
     @IBAction func signUpButtonPressed () {
         
-        UIApplication.shared.open(URL(string: "https://auth.udacity.com/sign-up?next=https%3A%2F%2Fclassroom.udacity.com%2Fauthenticated")!, options: [:], completionHandler: nil)
+        UIApplication.shared.open(URL(string: "https://www.udacity.com/account/auth#!/signup")!)
     }
     
     //take user input and send a post request to Udacity to validate user credentials
