@@ -137,7 +137,7 @@
                         <viewLayoutGuide key="safeArea" id="lsz-uh-lbA"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="icon_mapview-selected" selectedImage="icon_mapview-selected" id="UKX-AY-DBE"/>
-                    <navigationItem key="navigationItem" id="3zG-hh-dZ8">
+                    <navigationItem key="navigationItem" title="On The Map" id="3zG-hh-dZ8">
                         <barButtonItem key="leftBarButtonItem" title="Log Out" id="4LL-0W-Llg">
                             <connections>
                                 <action selector="logOut" destination="vju-5Z-dif" id="jpy-dm-hYZ"/>
@@ -253,7 +253,7 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="" image="icon_listview-selected" selectedImage="icon_listview-selected" id="xYS-ko-XbM"/>
-                    <navigationItem key="navigationItem" id="UnY-fp-Quk">
+                    <navigationItem key="navigationItem" title="On The Map" id="UnY-fp-Quk">
                         <barButtonItem key="leftBarButtonItem" title="Log Out" id="7Lz-fp-cQj">
                             <connections>
                                 <action selector="logOut" destination="Idq-n5-A81" id="v1R-kr-TV6"/>

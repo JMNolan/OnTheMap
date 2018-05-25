@@ -101,9 +101,9 @@ class InfoPostingViewController: UIViewController {
         } else {
             OTMClient.sharedInstance().putStudentLocation(OTMClient.userMediaURL, OTMClient.userLatitude, OTMClient.userLongitude, completionHandler: { (success, error) in
                 if error != nil {
-//                    self.alertMessage = error!
-//                    alert.message = self.alertMessage
-//                    self.present(alert, animated: true, completion: nil)
+                    self.alertMessage = error!
+                    alert.message = self.alertMessage
+                    self.present(alert, animated: true, completion: nil)
                 } else {
                     self.dismiss(animated: true, completion: nil)
                 }

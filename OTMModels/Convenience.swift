@@ -105,7 +105,7 @@ extension OTMClient {
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: Constants.ApplicationIDHeader)
         request.addValue(Constants.ApiKey, forHTTPHeaderField: Constants.RestAPIHeader)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(OTMClient.userKey)\", \"firstName\": \"\(OTMClient.userFirstName)\", \"lastName\": \"\(OTMClient.userLastName)\",\"mapString\": \"\(OTMClient.userMapString)\", \"mediaURL\": \"\(OTMClient.userMediaURL!)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: .utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(OTMClient.userKey)\", \"firstName\": \"\(OTMClient.userFirstName!)\", \"lastName\": \"\(OTMClient.userLastName!)\",\"mapString\": \"\(OTMClient.userMapString!)\", \"mediaURL\": \"\(OTMClient.userMediaURL!)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: .utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             guard error == nil else {
