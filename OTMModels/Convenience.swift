@@ -29,8 +29,10 @@ extension OTMClient {
                 return
             }
             
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode <= 299 && statusCode >= 200 else {
-                completionHandler(false, "Status code returned is not 2XX")
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            guard statusCode! <= 299 && statusCode! >= 200 else {
+                completionHandler(false, "Request failed. Status code \(statusCode!). Please try again later.")
+                print(statusCode!)
                 return
             }
             
@@ -47,7 +49,7 @@ extension OTMClient {
             }
             
             OTMClient.studentLocations = results
-            
+            OTMClient.locationsPulledSuccessfully = true
             completionHandler(true, nil)
         }
         task.resume()
@@ -232,10 +234,13 @@ extension OTMClient {
                 return
             }
             
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode <= 299 && statusCode >= 200 else {
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            guard statusCode! <= 299 && statusCode! >= 200 else {
                 completionHandler(false)
+                print(statusCode!)
                 return
             }
+            
             var parsedData: [String:AnyObject]!
             
             do {

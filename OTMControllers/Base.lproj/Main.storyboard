@@ -342,12 +342,6 @@
                                     <constraint firstAttribute="height" constant="58" id="pvJ-Vt-z0y"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wkb-AN-ZVw">
-                                <rect key="frame" x="38" y="390" width="300" height="91"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nTw-oH-153">
                                 <rect key="frame" x="56" y="312" width="263" height="30"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -364,6 +358,13 @@
                                     <action selector="searchUserInfo" destination="E7t-sr-lhR" eventType="touchUpInside" id="zcO-7G-jJ7"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8Wy-03-vwG">
+                                <rect key="frame" x="170.5" y="390" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="BcT-4P-ATj"/>
+                                    <constraint firstAttribute="height" constant="35" id="Ymn-o2-YxJ"/>
+                                </constraints>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -382,14 +383,13 @@
                             <constraint firstItem="ELp-FK-h9m" firstAttribute="height" secondItem="6pb-4P-1be" secondAttribute="height" multiplier="0.05" id="IxE-h1-rdM"/>
                             <constraint firstItem="nTw-oH-153" firstAttribute="centerX" secondItem="6pb-4P-1be" secondAttribute="centerX" id="RFg-fk-PEA"/>
                             <constraint firstItem="Bvq-KW-p57" firstAttribute="top" secondItem="6pb-4P-1be" secondAttribute="top" constant="68" id="RGX-AR-7dY"/>
+                            <constraint firstItem="8Wy-03-vwG" firstAttribute="centerX" secondItem="xaG-iA-TDi" secondAttribute="centerX" id="Rpm-ca-4KL"/>
                             <constraint firstItem="xaG-iA-TDi" firstAttribute="leading" secondItem="6pb-4P-1be" secondAttribute="leading" id="V0W-9b-YKV"/>
-                            <constraint firstItem="Wkb-AN-ZVw" firstAttribute="top" secondItem="nTw-oH-153" secondAttribute="bottom" constant="48" id="Vqy-5J-zim"/>
                             <constraint firstItem="asN-zq-eOy" firstAttribute="centerX" secondItem="6pb-4P-1be" secondAttribute="centerX" id="Xi2-fW-S3d"/>
+                            <constraint firstItem="8Wy-03-vwG" firstAttribute="top" secondItem="nTw-oH-153" secondAttribute="bottom" constant="48" id="YnG-Rs-Dkd"/>
                             <constraint firstItem="ELp-FK-h9m" firstAttribute="top" secondItem="Bvq-KW-p57" secondAttribute="bottom" constant="45" id="Ztb-ry-IQR"/>
                             <constraint firstItem="O3Y-pa-sWf" firstAttribute="width" secondItem="6pb-4P-1be" secondAttribute="width" multiplier="0.7" id="bMl-Of-QGe"/>
-                            <constraint firstItem="Wkb-AN-ZVw" firstAttribute="width" secondItem="6pb-4P-1be" secondAttribute="width" multiplier="0.8" id="dUJ-T1-GR7"/>
                             <constraint firstItem="nTw-oH-153" firstAttribute="top" secondItem="asN-zq-eOy" secondAttribute="bottom" constant="8" id="f0Q-dQ-bEh"/>
-                            <constraint firstItem="Wkb-AN-ZVw" firstAttribute="height" secondItem="6pb-4P-1be" secondAttribute="height" multiplier="0.15" id="hVG-U3-wM1"/>
                             <constraint firstItem="asN-zq-eOy" firstAttribute="width" secondItem="6pb-4P-1be" secondAttribute="width" multiplier="0.7" id="j64-P6-VcW"/>
                             <constraint firstItem="6pb-4P-1be" firstAttribute="bottom" secondItem="O3Y-pa-sWf" secondAttribute="bottom" constant="26" id="k6w-UT-oZe"/>
                             <constraint firstItem="O3Y-pa-sWf" firstAttribute="height" secondItem="6pb-4P-1be" secondAttribute="height" multiplier="0.05" id="oSi-8V-Q9z">
@@ -399,7 +399,6 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
-                            <constraint firstItem="Bvq-KW-p57" firstAttribute="centerX" secondItem="Wkb-AN-ZVw" secondAttribute="centerX" id="ruJ-SC-5RY"/>
                             <constraint firstItem="asN-zq-eOy" firstAttribute="top" secondItem="ELp-FK-h9m" secondAttribute="bottom" constant="8" id="vDa-Qp-bCw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6pb-4P-1be"/>
@@ -413,9 +412,9 @@
                     </navigationItem>
                     <connections>
                         <outlet property="cancelButton" destination="T3z-nG-pYr" id="TXy-2d-kwM"/>
-                        <outlet property="errorLabel" destination="Wkb-AN-ZVw" id="4W8-KZ-C95"/>
                         <outlet property="findLocationButton" destination="nTw-oH-153" id="JD3-VQ-l8m"/>
                         <outlet property="finishButton" destination="O3Y-pa-sWf" id="x5u-HF-i0p"/>
+                        <outlet property="geocodeActivityIndicator" destination="8Wy-03-vwG" id="Aup-Nw-1PN"/>
                         <outlet property="locationTextField" destination="ELp-FK-h9m" id="l7U-fB-4To"/>
                         <outlet property="mapView" destination="xaG-iA-TDi" id="sYE-fQ-moq"/>
                         <outlet property="urlTextField" destination="asN-zq-eOy" id="t4m-SY-V1q"/>

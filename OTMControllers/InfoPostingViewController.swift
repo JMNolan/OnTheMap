@@ -10,24 +10,33 @@ import Foundation
 import UIKit
 import MapKit
 
-class InfoPostingViewController: UIViewController {
+class InfoPostingViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Outlets
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var urlTextField: UITextField!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
-    @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var findLocationButton: UIButton!
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var worldImage: UIImageView!
+    @IBOutlet weak var geocodeActivityIndicator: UIActivityIndicatorView!
+    
     
     let pin = MKPointAnnotation()
     let alert = UIAlertController(title: "Submission Failed", message: "", preferredStyle: .alert)
     
+    func textFieldShouldReturn (_ textField: UITextField) -> Bool{
+        self.view.endEditing(true)
+        return true
+    }
+    
     // MARK: Functions
     override func viewDidLoad() {
         
+        self.geocodeActivityIndicator.isHidden = true
+        self.urlTextField.delegate = self
+        self.locationTextField.delegate = self
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default Action"), style:.default))
         OTMClient.sharedInstance().getStudentLocation(completionHandler: { (success) in
             if success {
@@ -51,7 +60,6 @@ class InfoPostingViewController: UIViewController {
                 self.urlTextField.isHidden = false
                 self.findLocationButton.isHidden = false
                 self.worldImage.isHidden = false
-                self.errorLabel.text = ""
                 self.mapView.isHidden = true
                 self.finishButton.isHidden = true
                 self.cancelButton.title = "Cancel"
@@ -62,6 +70,11 @@ class InfoPostingViewController: UIViewController {
     //convert user input to a usable location and store inputted url
     @IBAction func searchUserInfo() {
         
+        guard OTMClient.locationsPulledSuccessfully == true else {
+            alert.message = "Student locations were not pulled successfully. Please return to the map and refresh to try again."
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
         guard locationTextField.text != nil && locationTextField.text != "" else {
             alert.message = "Please enter a valid location"
             self.present(alert, animated: true, completion: nil)
@@ -77,6 +90,8 @@ class InfoPostingViewController: UIViewController {
         geocodeLocation(address: locationTextField.text!)
         OTMClient.userMediaURL = urlTextField.text!
         OTMClient.userMapString = locationTextField.text!
+        self.view.endEditing(true)
+        
     }
     
     //user posts inputted information to udacity parse
@@ -107,6 +122,8 @@ class InfoPostingViewController: UIViewController {
     //change user inputted location to a usable location
     func geocodeLocation (address: String) {
         
+        self.geocodeActivityIndicator.isHidden = false
+        self.geocodeActivityIndicator.startAnimating()
         CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in
             if error != nil {
                 self.alert.message = "Geocoding failed"
@@ -133,12 +150,13 @@ class InfoPostingViewController: UIViewController {
                 self.urlTextField.isHidden = true
                 self.findLocationButton.isHidden = true
                 self.worldImage.isHidden = true
-                self.errorLabel.text = ""
                 self.mapView.isHidden = false
                 self.finishButton.isHidden = false
                 self.cancelButton.title = "Add Location"
                 self.mapView.addAnnotation(self.pin)
             }
+            self.geocodeActivityIndicator.stopAnimating()
+            self.geocodeActivityIndicator.isHidden = true
         })
     }
 }

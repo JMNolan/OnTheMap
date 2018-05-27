@@ -16,6 +16,7 @@ class OTMClient: NSObject {
     static var sessionID: String!
     static var studentLocations: [[String:AnyObject]]!
     static var allPins: [MKPointAnnotation] = []
+    static var locationsPulledSuccessfully: Bool = false
     
     //user info
     static var userFirstName: String!

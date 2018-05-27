@@ -18,9 +18,11 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         mapView.delegate = self
         OTMClient.sharedInstance().getStudentLocations() {(success, error) in
-            guard error == nil else {
-                print(error!)
-                return
+            if error != nil {
+                let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title:NSLocalizedString("OK", comment: "Default Action"), style: .default))
+                alert.message = error!
+                self.present(alert, animated: true, completion: nil)
             }
             
             if success == true {
@@ -89,9 +91,11 @@ class MapViewController: UIViewController {
     @IBAction func refreshPins(_ sender: Any) {
         
         OTMClient.sharedInstance().getStudentLocations() {(success, error) in
-            guard error == nil else {
-                print(error!)
-                return
+            if error != nil {
+                let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title:NSLocalizedString("OK", comment: "Default Action"), style: .default))
+                alert.message = error!
+                self.present(alert, animated: true, completion: nil)
             }
             
             if success == true {
