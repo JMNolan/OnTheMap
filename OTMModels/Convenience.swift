@@ -14,7 +14,7 @@ extension OTMClient {
     
     //retrieve student locations from Udaicty Parse API
     func getStudentLocations (completionHandler: @escaping (_ success: Bool, _ errorString: String?) -> Void ) {
-        var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=100")!)
+        var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=100?order=-updatedAt")!)
         request.addValue(OTMClient.Constants.ApplicationID, forHTTPHeaderField: OTMClient.Constants.ApplicationIDHeader)
         request.addValue(OTMClient.Constants.ApiKey, forHTTPHeaderField: OTMClient.Constants.RestAPIHeader)
         let session = URLSession.shared
