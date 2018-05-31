@@ -31,7 +31,7 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapview: MKMapView, annotationView view: MKAnnotationView,calloutAccessoryControlTapped control: UIControl) {
         
         let url = URL(string: ((view.annotation?.subtitle)!)!)
-        print(url!)
+        print(url)
         UIApplication.shared.open(url!, options: [:], completionHandler: nil)
     }
 }

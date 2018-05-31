@@ -35,20 +35,21 @@ extension OTMClient {
                 print(statusCode!)
                 return
             }
-            
-            var parsedData: [String:AnyObject]!
+
+//            do {
+//                let studentData = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+//                print(studentData)
+//            } catch {
+//                completionHandler(false, "Unable to parse data from request")
+//            }
             do {
-                parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                let studentData = try JSONDecoder().decode(OTMClient.getStudentLocationsStruct.self, from: data)
+                print(studentData.results)
+                OTMClient.studentLocationsInfo = studentData.results
             } catch {
-                completionHandler(false, "Unable to parse data")
-            }
-            
-            guard let results = parsedData[OTMClient.StudentLocationResponseKeys.Results] as! [[String:AnyObject]]? else {
-                completionHandler(false, "Unable to find entry 'results' in \(parsedData)")
+                completionHandler(false, "Unable to parse data into struct")
                 return
             }
-            
-            OTMClient.studentLocations = results
             OTMClient.locationsPulledSuccessfully = true
             completionHandler(true, nil)
         }
