@@ -12,13 +12,13 @@ After viewing the information posted by other students, a user can post their ow
 The app has three view controller scenes:
 
 
-Login View: Allows the user to log in using their Udacity credentials, or (as an extra credit exercise) using their Facebook account
+Login View:Allows the user to log in using their Udacity credentials, or (as an extra credit exercise) using their Facebook account
 Map and Table Tabbed View: Allows users to see the locations of other students in two formats.  
 Information Posting View: Allows the users specify their own locations and links.
 
 These three scenes are described in detail below.
 
-Login View
+## **Login View**
 
 The login view accepts the email address and password that students use to login to the Udacity site. User credentials are not required to be saved upon successful login.
 
@@ -35,7 +35,7 @@ If the connection is made and the email and password are good, the app will segu
 
 If the login does not succeed, the user will be presented with an alert view specifying whether it was a failed network connection, or an incorrect email and password.
 
-Map And Table Tabbed View
+## **Map And Table Tabbed View**
 
 This view has two tabs at the bottom: one specifying a map, and the other a table.
 
@@ -63,13 +63,14 @@ When the table tab is selected, the most recent 100 locations posted by students
 Both the map tab and the table tab share the same top navigation bar.
 
 
-The rightmost bar button will be a refresh button. Clicking on the button will refresh the entire data set by downloading and displaying the most recent 100 posts made by students.
+The rightmost bar button will be a pin button. Clicking on the pin button will modally present the Information Posting View.
+
+ refresh button. Clicking on the button will refresh the entire data set by downloading and displaying the most recent 100 posts made by students.
+The bar button directly to its left will be a refresh button. Clicking on the button will refresh the entire data set by downloading and displaying the most recent 100 posts made by students.
 
 
-The bar button directly to its left will be a pin button. Clicking on the pin button will modally present the Information Posting View.
+## **Information Posting View**
 
-
-Information Posting View
 
 ![Information Posting View](readMeImages/searchForLocationView.png "View presented when user pushes the 'add pin' button on the map or table view")
 
