@@ -26,7 +26,7 @@ class MapViewController: UIViewController {
             }
             
             if success == true {
-                for dictionary in OTMClient.studentLocations {
+                for dictionary in OTMClient.studentLocationsInfo {
                     let pin = MKPointAnnotation()
                     let firstName: String
                     let lastName: String
@@ -35,31 +35,31 @@ class MapViewController: UIViewController {
                     let longitude: Double
                     
                     //needed due to certain values in Parse API having NSNull which is not accepted by Swift 4
-                    if let first = dictionary[OTMClient.StudentLocationResponseKeys.FirstName] as? String {
+                    if let first = dictionary.firstName {
                         firstName = first
                     } else {
                         firstName = ""
                     }
                     
-                    if let last = dictionary[OTMClient.StudentLocationResponseKeys.LastName] as? String {
+                    if let last = dictionary.lastName {
                         lastName = last
                     } else {
                         lastName = ""
                     }
                     
-                    if let site = dictionary[OTMClient.StudentLocationResponseKeys.MediaURL] as? String {
+                    if let site = dictionary.mediaURL {
                         url = site
                     } else {
                         url = ""
                     }
                     
-                    if let lat = dictionary[OTMClient.StudentLocationResponseKeys.Latitude] as? Double {
+                    if let lat = dictionary.latitude {
                         latitude = lat
                     } else {
                         latitude = 0.0
                     }
                     
-                    if let long = dictionary[OTMClient.StudentLocationResponseKeys.Longitude] as? Double {
+                    if let long = dictionary.longitude {
                         longitude = long
                     } else {
                         longitude = 0.0
@@ -100,7 +100,7 @@ class MapViewController: UIViewController {
             
             if success == true {
                 OTMClient.allPins = []
-                for dictionary in OTMClient.studentLocations {
+                for dictionary in OTMClient.studentLocationsInfo {
                     let pin = MKPointAnnotation()
                     let firstName: String
                     let lastName: String
@@ -109,31 +109,31 @@ class MapViewController: UIViewController {
                     let longitude: Double
                     
                     //needed due to some info in Parse API being populated with NSNull type which is not accepted by Swift 4
-                    if let first = dictionary[OTMClient.StudentLocationResponseKeys.FirstName] as? String {
+                    if let first = dictionary.firstName {
                         firstName = first
                     } else {
                         firstName = ""
                     }
                     
-                    if let last = dictionary[OTMClient.StudentLocationResponseKeys.LastName] as? String {
+                    if let last = dictionary.lastName {
                         lastName = last
                     } else {
                         lastName = ""
                     }
                     
-                    if let site = dictionary[OTMClient.StudentLocationResponseKeys.MediaURL] as? String {
+                    if let site = dictionary.mediaURL {
                         url = site
                     } else {
                         url = ""
                     }
                     
-                    if let lat = dictionary[OTMClient.StudentLocationResponseKeys.Latitude] as? Double {
+                    if let lat = dictionary.latitude {
                         latitude = lat
                     } else {
                         latitude = 0.0
                     }
                     
-                    if let long = dictionary[OTMClient.StudentLocationResponseKeys.Longitude] as? Double {
+                    if let long = dictionary.longitude {
                         longitude = long
                     } else {
                         longitude = 0.0
